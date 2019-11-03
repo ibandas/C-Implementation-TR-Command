@@ -11,10 +11,15 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3) {
+    if (argc != 4) {
         fprintf(stderr, USAGE_MESSAGE, argv[0]);
         exit(1);
     }
+    else {
+        int length = charset_length(argv[1]);
+        printf("Length of command line argument is: %d\n", length);
+    }
+    return 0;
 
     // TODO: Your code goes here
 }

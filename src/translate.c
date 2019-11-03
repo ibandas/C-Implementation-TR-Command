@@ -1,5 +1,6 @@
 #include "translate.h"
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -21,14 +22,34 @@ char interpret_escape(char c)
     }
 }
 
+// TODO: Add conditional for escapes
 size_t charset_length(const char* src)
 {
     size_t result = 0;
-
-    // TODO: Your code goes here
+    const char* p = &src[0];
+    const char* start;
+    const char* end;
+    while(*p != '\0'){
+        if (*(p+1) == '-' && *(p+2) != '\0') {
+            start = *p;
+            end = *(p+2);
+            if (start < end) {
+                result = result + (end - start + 1);
+            }
+            else {
+                result = result + 3;
+            }
+            p = p+3;
+        }
+        else {
+            ++p;
+            result++;
+        }
+    }
 
     return result;
 }
+
 
 char* expand_charset(const char* src)
 {
