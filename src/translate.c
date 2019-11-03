@@ -41,6 +41,11 @@ size_t charset_length(const char* src)
             }
             p = p+3;
         }
+        else if (*p == '\\' && *(p+1) != '\0'){
+            printf("CAME THROUGH!");
+            result++;
+            p = p+2;
+        }
         else {
             ++p;
             result++;
