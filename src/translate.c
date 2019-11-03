@@ -22,7 +22,6 @@ char interpret_escape(char c)
     }
 }
 
-// TODO: Add conditional for escapes
 size_t charset_length(const char* src)
 {
     size_t result = 0;
