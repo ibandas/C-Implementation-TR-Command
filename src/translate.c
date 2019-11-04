@@ -85,6 +85,11 @@ char translate_char(char c, const char* from, const char* to)
 
 void translate(char* s, const char* from, const char* to)
 {
-    // TODO: Your code goes here
+    size_t i = 0;
+    while(s[i] != '\0') {
+        s[i] = translate_char(s[i], from, to);
+        i++;
+    }
+    printf("%s", s);
 }
 

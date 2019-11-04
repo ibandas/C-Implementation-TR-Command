@@ -16,11 +16,8 @@ int main(int argc, char* argv[])
         exit(1);
     }
     else {
-        int length = charset_length(argv[1]);
-        translate_char('e', "Hello_World", "Hallo");
-        // printf("Length of command line argument is: %d\n", length);
+        // int length = charset_length(argv[1]);
+        translate(argv[1], argv[2],    argv[3]);
     }
     return 0;
-
-    // TODO: Your code goes here
 }
