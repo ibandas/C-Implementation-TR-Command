@@ -71,8 +71,15 @@ char* expand_charset(const char* src)
 
 char translate_char(char c, const char* from, const char* to)
 {
-    // TODO: Your code goes here
-
+    const char* p = &from[0];
+    int index = 0;
+    while(*p != '\0'){
+        if (*p == c){
+            return to[index];
+        }
+        ++index;
+        ++p;
+    }
     return c;
 }
 
