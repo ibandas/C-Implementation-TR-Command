@@ -72,8 +72,9 @@ char* expand_charset(const char* src)
             src = src+3;
         }
         else if (*src == '\\' && *(src+1) != '\0'){
-            //interpret_escape(*src);
-            src = src + 2;
+            src++;
+            *dst = interpret_escape(*src);
+            src++;
             dst = dst + 2;
         }
         else {
