@@ -24,23 +24,31 @@ char interpret_escape(char c)
 size_t charset_length(const char* src)
 {
     size_t result = 0;
-    const char* start;
-    const char* end;
+    char* start;
+    char* end;
     while(*src != '\0'){
-        if (*(src+1) == '-' && *(src+2) != '\0') {
-            start = *src;
-            end = *(src+2);
-            if (start < end) {
-                result = result + (end - start + 1);
+        if (*(src+1) == '-' ) {
+            if ( *(src+2) != '\0'){
+                start = *src;
+                end = *(src+2);
+                if (start <= end) {
+                    result = result + (end - start + 1);
+                }
+                src = src+3;
             }
-            else {
-                result = result + 3;
+            else{
+                src = src + 2;
             }
-            src = src+3;
+
         }
-        else if (*src == '\\' && *(src+1) != '\0'){
-            result++;
-            src = src+2;
+        else if (*src == '\\'){
+            if ( *(src+1) != '\0'){
+                result++;
+                src = src+2;
+            }
+            else{
+                src++;
+            }
         }
         else {
             src++;
@@ -57,25 +65,30 @@ char* expand_charset(const char* src)
 
     if (result == NULL) return NULL;
 
-    int start;
-    int end;
+    int start, end;
 
     while(*src != '\0'){
-        if (*(src+1) == '-' && *(src+2) != '\0') {
-            start = *src;
-            end = *(src+2);
-            while (start <= end) {
-                *dst = start;
-                dst++;
-                start++;
+        if (*(src+1) == '-') {
+            if (*(src+2) != '\0'){
+                start = *src;
+                end = *(src+2);
+                while (start <= end) {
+                    *dst = (char)start;
+                    dst++; start++;
+                }
+                src = src+3;
             }
-            src = src+3;
+            else{
+                src = src + 2;
+            }
         }
-        else if (*src == '\\' && *(src+1) != '\0'){
+        else if (*src == '\\'){
+            if (*(src+1) != '\0'){
+                src++;
+                *dst = interpret_escape(*src);
+                dst = dst + 1;
+            }
             src++;
-            *dst = interpret_escape(*src);
-            src++;
-            dst = dst + 2;
         }
         else {
             *dst++ = *src++;
@@ -87,7 +100,7 @@ char* expand_charset(const char* src)
 
 char translate_char(char c, const char* from, const char* to)
 {
-    int index = 0;
+    size_t index = 0;
     while(*from != '\0'){
         if (*from == c){
             return to[index];
