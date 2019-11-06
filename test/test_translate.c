@@ -31,8 +31,9 @@ static void test_charset_length()
 {
     CHECK_INT( charset_length("abc"), 3 );
     CHECK_INT( charset_length("a-z"), 26 );
-    CHECK_INT( charset_length("a-"), 2 );
-    CHECK_INT( charset_length("b-a"), 3 );
+    CHECK_INT( charset_length("a-"), 0 );
+    CHECK_INT( charset_length("b-a"), 0 );
+    CHECK_INT( charset_length("a-cd\\"), 4);
 }
 
 
@@ -53,9 +54,10 @@ static void test_expand_charset()
 {
     assert_expand( "abc", "abc" );
     assert_expand( "a-e", "abcde" );
-    assert_expand( "a-d", "abcd" );
-    assert_expand( "a-f", "abcdef" );
     assert_expand( "a-d\\b", "abcd\b" );
+    assert_expand( "af-b", "a" );
+    assert_expand( "ab-", "a" );
+    assert_expand( "a\\", "a" );
 }
 
 
