@@ -11,13 +11,30 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc != 4) {
+    if (argc != 3) {
         fprintf(stderr, USAGE_MESSAGE, argv[0]);
         exit(1);
     }
     else {
-        // int length = charset_length(argv[1]);
-        translate(argv[1], argv[2],    argv[3]);
+        char* from = expand_charset(argv[1]);
+        char* to = expand_charset(argv[2]);
+        if (from == NULL || to == NULL){
+            fprintf(stderr, OOM_MESSAGE, argv[0]);
+        }
+        else if (strlen(from) != strlen(to)){
+            fprintf(stderr, LENGTH_MESSAGE, argv[0]);
+        }
+        else {
+            while(true){
+                char *s = read_line();
+                translate(s, from, to);
+                printf("%s", s);
+                printf("\n");
+                free(s);
+            }
+        }
+        free(from);
+        free(to);
     }
     return 0;
 }
