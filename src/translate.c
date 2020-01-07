@@ -24,9 +24,37 @@ char interpret_escape(char c)
 size_t charset_length(const char* src)
 {
     size_t result = 0;
+    char* start;
+    char* end;
+    while(*src != '\0'){
+        if (*(src+1) == '-' ) {
+            if ( *(src+2) != '\0'){
+                start = *src;
+                end = *(src+2);
+                if (start <= end) {
+                    result = result + (end - start + 1);
+                }
+                src = src+3;
+            }
+            else{
+                src = src + 2;
+            }
 
-    // TODO: Your code goes here
-
+        }
+        else if (*src == '\\'){
+            if ( *(src+1) != '\0'){
+                result++;
+                src = src+2;
+            }
+            else{
+                src++;
+            }
+        }
+        else {
+            src++;
+            result++;
+        }
+    }
     return result;
 }
 
@@ -37,22 +65,58 @@ char* expand_charset(const char* src)
 
     if (result == NULL) return NULL;
 
-    // TODO: Your code goes here
+    int start, end;
 
+    while(*src != '\0'){
+        if (*(src+1) == '-') {
+            if (*(src+2) != '\0'){
+                start = *src;
+                end = *(src+2);
+                while (start <= end) {
+                    *dst = (char)start;
+                    dst++; start++;
+                }
+                src = src+3;
+            }
+            else{
+                src = src + 2;
+            }
+        }
+        else if (*src == '\\'){
+            if (*(src+1) != '\0'){
+                src++;
+                *dst = interpret_escape(*src);
+                dst = dst + 1;
+            }
+            src++;
+        }
+        else {
+            *dst++ = *src++;
+        }
+    }
     *dst = '\0';
-
     return result;
 }
 
 char translate_char(char c, const char* from, const char* to)
 {
-    // TODO: Your code goes here
-
+    size_t index = 0;
+    while(*from != '\0'){
+        if (*from == c){
+            return to[index];
+        }
+        ++index;
+        ++from;
+    }
     return c;
 }
 
 void translate(char* s, const char* from, const char* to)
 {
-    // TODO: Your code goes here
+    size_t i = 0;
+    while(s[i] != '\0') {
+        s[i] = translate_char(s[i], from, to);
+        i++;
+    }
 }
 

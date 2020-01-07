@@ -15,6 +15,26 @@ int main(int argc, char* argv[])
         fprintf(stderr, USAGE_MESSAGE, argv[0]);
         exit(1);
     }
-
-    // TODO: Your code goes here
+    else {
+        char* from = expand_charset(argv[1]);
+        char* to = expand_charset(argv[2]);
+        if (from == NULL || to == NULL){
+            fprintf(stderr, OOM_MESSAGE, argv[0]);
+        }
+        else if (strlen(from) != strlen(to)){
+            fprintf(stderr, LENGTH_MESSAGE, argv[0]);
+        }
+        else {
+            while(true){
+                char *s = read_line();
+                translate(s, from, to);
+                printf("%s", s);
+                printf("\n");
+                free(s);
+            }
+        }
+        free(from);
+        free(to);
+    }
+    return 0;
 }

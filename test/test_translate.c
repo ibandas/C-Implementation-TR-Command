@@ -31,8 +31,9 @@ static void test_charset_length()
 {
     CHECK_INT( charset_length("abc"), 3 );
     CHECK_INT( charset_length("a-z"), 26 );
-
-    // TODO: Add more tests for charset_length() here
+    CHECK_INT( charset_length("a-"), 0 );
+    CHECK_INT( charset_length("b-a"), 0 );
+    CHECK_INT( charset_length("a-cd\\"), 4);
 }
 
 
@@ -53,8 +54,10 @@ static void test_expand_charset()
 {
     assert_expand( "abc", "abc" );
     assert_expand( "a-e", "abcde" );
-
-    // TODO: Add more tests for expand_charset() here
+    assert_expand( "a-d\\b", "abcd\b" );
+    assert_expand( "af-b", "a" );
+    assert_expand( "ab-", "a" );
+    assert_expand( "a\\", "a" );
 }
 
 
@@ -66,8 +69,8 @@ static void test_translate_char()
 {
     CHECK_CHAR( translate_char('a', "xyz", "XYZ"), 'a' );
     CHECK_CHAR( translate_char('y', "xyz", "XYZ"), 'Y' );
-
-    // TODO: Add more tests for translate_char() here
+    CHECK_CHAR( translate_char('x', "xyz", "XYZ"), 'X' );
+    CHECK_CHAR( translate_char('z', "xyz", "XYZ"), 'Z' );
 }
 
 
@@ -100,8 +103,7 @@ void test_translate()
 {
     assert_tr( "Hello, world!", ",! ",    "___",    "Hello__world_" );
     assert_tr( "hELLO, WORLD!", "a-zA-Z", "A-Za-z", "Hello, world!" );
-
-    // TODO: Add more tests for translate() here
+    assert_tr( "Hello, world!", "a-e", "f-j", "Hjllo, worli!" );
 }
 
 
